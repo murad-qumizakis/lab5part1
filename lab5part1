@@ -1,0 +1,41 @@
+const fs = require("fs");
+
+fs.readFile("./menu1.csv", "utf8", function (err, data) {
+    if (err) {
+        return console.log(err);
+    }
+
+    let splitData = data.split("\n");
+
+    let itemObject = { lunch: [], dinner: [] };
+
+    for (const element of splitData) {
+        let values = element.split(",");
+        itemObject[values[0]].push({
+            price: values[3].substring(1) * 1.8,
+            quantity: values[2],
+            name: values[1],
+        });
+    }
+
+
+    let content = "**Lunch Items**\n";
+    itemObject.lunch.forEach((item) => {
+        content += item.price + "\t" + item.name + ", " + item.quantity + "\n";
+
+    });
+
+    content += "**Dinner Items**" + "\n";
+
+    itemObject.dinner.forEach((item) => {
+        content += item.price + "\t" + item.name + ", " + item.quantity + "\n";
+    });
+
+
+    fs.writeFile("menu1.txt", content, (err) => {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("Complete");
+    });
+});
